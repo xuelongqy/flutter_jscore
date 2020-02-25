@@ -6,10 +6,16 @@
 
 JavaScriptCore for Flutter.
 
+#### Demo
+|Screen recording|Apk|
+|:---:|:---:|
+|![](https://raw.githubusercontent.com/xuelongqy/flutter_jscore/master/example/art/flutter_jscore.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_jscore/master/example/art/apk_QRCode.png)|
+|[Code](https://github.com/xuelongqy/flutter_jscore/blob/master/example/lib/views/jscore_page.dart)|[Download](https://raw.githubusercontent.com/xuelongqy/flutter_jscore/master/example/art/flutter_jscore.apk)|
+
 ## Getting Started
 
 #### Add dependency
-```
+```yaml
 // pub
 dependencies:
   flutter_jscore: ^last_version
@@ -27,7 +33,7 @@ dependencies:
 ```
 
 #### Super simple to use
-```
+```dart
 import 'package:flutter_jscore/flutter_jscore.dart';
 
 void runJS() {
@@ -38,3 +44,4 @@ void runJS() {
     jsContext.release();
 }
 ```
+
