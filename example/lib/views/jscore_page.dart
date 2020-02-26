@@ -10,6 +10,7 @@ class JsCorePage extends StatefulWidget {
     return JsCorePageState();
   }
 }
+
 class JsCorePageState extends State<JsCorePage> {
   // 输入控制器
   TextEditingController _jsInputController;
@@ -27,8 +28,10 @@ class JsCorePageState extends State<JsCorePage> {
     _jsContext = JSContext.createInGroup();
     // 注册alert方法
     _alertDartFunc = _alert;
-    var jsAlertFunction = JSObject.makeFunctionWithCallback(_jsContext, 'alert', Pointer.fromFunction(alert));
-    _jsContext.globalObject.setProperty('alert', jsAlertFunction.toValue(), JSPropertyAttributes.kJSPropertyAttributeNone);
+    var jsAlertFunction = JSObject.makeFunctionWithCallback(
+        _jsContext, 'alert', Pointer.fromFunction(alert));
+    _jsContext.globalObject.setProperty('alert', jsAlertFunction.toValue(),
+        JSPropertyAttributes.kJSPropertyAttributeNone);
     // 注册flutter.print静态方法
     _printDartFunc = _print;
     var flutterJSClass = JSClass.create(JSClassDefinition(
@@ -44,7 +47,8 @@ class JsCorePageState extends State<JsCorePage> {
       ],
     ));
     var flutterJSObject = JSObject.make(_jsContext, flutterJSClass);
-    _jsContext.globalObject.setProperty('flutter', flutterJSObject.toValue(), JSPropertyAttributes.kJSPropertyAttributeDontDelete);
+    _jsContext.globalObject.setProperty('flutter', flutterJSObject.toValue(),
+        JSPropertyAttributes.kJSPropertyAttributeDontDelete);
     // 设置默认JavaScript脚本
     _jsInputController = TextEditingController(text: '''
 function helloJsCore()

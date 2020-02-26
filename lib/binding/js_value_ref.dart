@@ -69,8 +69,7 @@ class JSTypedArrayType {
 /// [value] (JSValueRef) The JSValue whose type you want to obtain.
 /// [@result] (JSType) A value of type JSType that identifies value's type.
 final int Function(Pointer ctx, Pointer value) jSValueGetType = jscLib
-    .lookup<NativeFunction<Int8 Function(Pointer, Pointer)>>(
-        'JSValueGetType')
+    .lookup<NativeFunction<Int8 Function(Pointer, Pointer)>>('JSValueGetType')
     .asFunction();
 
 /// Tests whether a JavaScript value's type is the undefined type.
@@ -279,13 +278,14 @@ final Pointer Function(Pointer ctx, Pointer string) jSValueMakeFromJSONString =
 /// [exception] (JSValueRef*) A pointer to a JSValueRef in which to store an exception, if any. Pass NULL if you do not care to store an exception.
 /// [@result] (JSStringRef) A JSString with the result of serialization, or NULL if an exception is thrown.
 final Pointer Function(
-        Pointer ctx, Pointer value, int indent, Pointer exception)
-    jSValueCreateJSONString = jscLib
-        .lookup<
-            NativeFunction<
-                Pointer Function(Pointer, Pointer, Int32,
-                    Pointer)>>('JSValueCreateJSONString')
-        .asFunction();
+    Pointer ctx,
+    Pointer value,
+    int indent,
+    Pointer
+        exception) jSValueCreateJSONString = jscLib
+    .lookup<NativeFunction<Pointer Function(Pointer, Pointer, Int32, Pointer)>>(
+        'JSValueCreateJSONString')
+    .asFunction();
 
 /// Converts a JavaScript value to boolean and returns the resulting boolean.
 /// [ctx] (JSContextRef) The execution context to use.

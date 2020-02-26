@@ -450,7 +450,8 @@ class JSClassDefinition {
         this.staticFunctions == null || this.staticFunctions.isEmpty
             ? nullptr
             : JSObjectRef.JSStaticFunction.allocateArray(
-                this.staticFunctions.map((e) => e.toStruct()).toList()).addressOf;
+                    this.staticFunctions.map((e) => e.toStruct()).toList())
+                .addressOf;
     return JSObjectRef.JSClassDefinition.allocate(
       version: version,
       attributes: jSClassAttributesToCEnum(attributes),
@@ -517,10 +518,13 @@ class JSObject {
   /// The default object constructor takes no arguments and constructs an object of class jsClass with no private data.
   /// [jsClass] A JSClass that is the class your constructor will assign to the objects its constructs. jsClass will be used to set the constructor's .prototype property, and to evaluate 'instanceof' expressions. Pass NULL to use the default object class.
   /// [callAsConstructor] A JSObjectCallAsConstructorCallback to invoke when your constructor is used in a 'new' expression. Pass NULL to use the default object constructor.
-  JSObject.makeConstructor(this.context, JSClass jsClass,
-      Pointer<NativeFunction<JSObjectRef.JSObjectCallAsConstructorCallback>> callAsConstructor)
-      : this.pointer = JSObjectRef.jSObjectMakeConstructor(context.pointer,
-            jsClass.pointer, callAsConstructor ?? nullptr);
+  JSObject.makeConstructor(
+      this.context,
+      JSClass jsClass,
+      Pointer<NativeFunction<JSObjectRef.JSObjectCallAsConstructorCallback>>
+          callAsConstructor)
+      : this.pointer = JSObjectRef.jSObjectMakeConstructor(
+            context.pointer, jsClass.pointer, callAsConstructor ?? nullptr);
 
   /// Creates a JavaScript Array object.
   /// The behavior of this function does not exactly match the behavior of the built-in Array constructor. Specifically, if one argument
@@ -644,7 +648,8 @@ class JSObject {
     this.context,
     JSTypedArrayType arrayType,
     Bytes bytes,
-  Pointer<NativeFunction<JSBase.JSTypedArrayBytesDeallocator>> bytesDeallocator,
+    Pointer<NativeFunction<JSBase.JSTypedArrayBytesDeallocator>>
+        bytesDeallocator,
     Pointer deallocatorContext, {
     JSValuePointer exception,
   }) : this.pointer = JSTypedArray.jSObjectMakeTypedArrayWithBytesNoCopy(
@@ -702,7 +707,8 @@ class JSObject {
   JSObject.makeArrayBufferWithBytesNoCopy(
     this.context,
     Bytes bytes,
-    Pointer<NativeFunction<JSBase.JSTypedArrayBytesDeallocator>> bytesDeallocator,
+    Pointer<NativeFunction<JSBase.JSTypedArrayBytesDeallocator>>
+        bytesDeallocator,
     Pointer deallocatorContext, {
     JSValuePointer exception,
   }) : this.pointer = JSTypedArray.jSObjectMakeArrayBufferWithBytesNoCopy(

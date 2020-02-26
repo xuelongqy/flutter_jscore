@@ -34,8 +34,8 @@ final Pointer Function(Pointer ctx, Pointer script, Pointer thisObject,
 /// [exception] (JSValueRef*) A pointer to a JSValueRef in which to store a syntax error exception, if any. Pass NULL if you do not care to store a syntax error exception.
 /// [@result] (bool) true if the script is syntactically correct, otherwise false.
 final Pointer Function(Pointer ctx, Pointer script, Pointer sourceURL,
-        int startingLineNumber, Pointer<Pointer> exception) jSCheckScriptSyntax =
-    jscLib
+        int startingLineNumber, Pointer<Pointer> exception)
+    jSCheckScriptSyntax = jscLib
         .lookup<
             NativeFunction<
                 Pointer Function(Pointer, Pointer, Pointer, Int32,

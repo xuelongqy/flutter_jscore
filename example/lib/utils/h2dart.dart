@@ -32,14 +32,17 @@ class FuncStructure {
 class Value {
   /// 名字
   String name;
+
   /// 类型
   String type;
+
   /// 摘要
   String abstract;
 }
 
 // 头文件转dart
-String h2Dart (String content, {
+String h2Dart(
+  String content, {
   String importContent = '''
 import 'dart:ffi';
 
@@ -47,7 +50,8 @@ import 'jsc_ffi.dart';
 ''',
   String dynamicLibraryName = 'jscLib',
 }) {
-  return toDart(readH(content),
+  return toDart(
+    readH(content),
     importContent: importContent,
     dynamicLibraryName: dynamicLibraryName,
   );
@@ -78,7 +82,7 @@ ContentStructure readH(String content) {
       List<String> abstract = [];
       try {
         abstract.add(line.split('@abstract')[1].trim());
-      }catch (e) {
+      } catch (e) {
         print('@abstract $e');
       }
       while (true) {
@@ -96,7 +100,7 @@ ContentStructure readH(String content) {
       List<String> discussion = [];
       try {
         discussion.add(line.split('@discussion')[1].trim());
-      }catch (e) {
+      } catch (e) {
         print('@discussion $e');
       }
       while (true) {
@@ -115,7 +119,7 @@ ContentStructure readH(String content) {
       String name = line.split(' ')[1];
       try {
         abstract.add(line.split('@param $name')[1].trim());
-      }catch (e) {
+      } catch (e) {
         print('@param $e');
       }
       while (true) {
@@ -135,7 +139,7 @@ ContentStructure readH(String content) {
       List<String> abstract = [];
       try {
         abstract.add(line.split('@result')[1].trim());
-      }catch (e) {
+      } catch (e) {
         print('@result $e');
       }
       while (true) {
@@ -164,12 +168,14 @@ ContentStructure readH(String content) {
         if (line.split(' ')[2] == 'const') {
           funStructure.func = line.split(' ')[3].split('(')[0];
         } else {
-          funStructure.func = line.split(' ')[2].split('(')[0].replaceAll('*', '');
+          funStructure.func =
+              line.split(' ')[2].split('(')[0].replaceAll('*', '');
         }
         // 方法参数
         String paramsStr = '';
         try {
-          paramsStr = line.substring(line.indexOf('(') + 1, line.indexOf(')')).trim();
+          paramsStr =
+              line.substring(line.indexOf('(') + 1, line.indexOf(')')).trim();
         } catch (e) {
           print('@JS_EXPORT $e');
         }
@@ -186,7 +192,7 @@ ContentStructure readH(String content) {
             if (value.name.startsWith('*')) {
               int start = 0;
               String pointer = '';
-              while(true) {
+              while (true) {
                 int nextStart = value.name.indexOf('*', start);
                 if (nextStart < 0) break;
                 start = nextStart + 1;
@@ -219,7 +225,8 @@ ContentStructure readH(String content) {
 }
 
 // 转换为dart
-String toDart(ContentStructure contentStructure, {
+String toDart(
+  ContentStructure contentStructure, {
   String importContent = '''
 import 'dart:ffi';
 
@@ -229,7 +236,8 @@ import 'jsc_ffi.dart';
 }) {
   String dartContent = importContent;
   // 方法
-  if (contentStructure.funcStructures != null && contentStructure.funcStructures.isNotEmpty) {
+  if (contentStructure.funcStructures != null &&
+      contentStructure.funcStructures.isNotEmpty) {
     contentStructure.funcStructures.forEach((funcStructure) {
       // 摘要
       if (funcStructure.abstract != null && funcStructure.abstract.isNotEmpty) {
@@ -238,7 +246,8 @@ import 'jsc_ffi.dart';
         });
       }
       // 描述
-      if (funcStructure.discussion != null && funcStructure.discussion.isNotEmpty) {
+      if (funcStructure.discussion != null &&
+          funcStructure.discussion.isNotEmpty) {
         funcStructure.discussion.forEach((item) {
           dartContent += '\n /// ${item ?? ''}';
         });
@@ -246,12 +255,14 @@ import 'jsc_ffi.dart';
       // 参数
       if (funcStructure.params != null && funcStructure.params.isNotEmpty) {
         funcStructure.params.forEach((param) {
-          dartContent += '\n /// ${param.name != null ? '[${param.name}]' : ''} ${param.type != null ? '(${param.type})' : ''} ${param.abstract ?? ''}';
+          dartContent +=
+              '\n /// ${param.name != null ? '[${param.name}]' : ''} ${param.type != null ? '(${param.type})' : ''} ${param.abstract ?? ''}';
         });
       }
       // 返回值
       if (funcStructure.result != null && funcStructure.result.type != 'void') {
-        dartContent += '\n /// ${funcStructure.result.name != null ? '[${funcStructure.result.name}]' : ''} ${funcStructure.result.type != null ? '(${funcStructure.result.type})' : ''} ${funcStructure.result.abstract ?? ''}';
+        dartContent +=
+            '\n /// ${funcStructure.result.name != null ? '[${funcStructure.result.name}]' : ''} ${funcStructure.result.type != null ? '(${funcStructure.result.type})' : ''} ${funcStructure.result.abstract ?? ''}';
       }
       // 方法
       String dartFunc = '\nfinal';
@@ -275,7 +286,8 @@ import 'jsc_ffi.dart';
       dartFunc += ') ';
       // dart方法名
       String firstName = funcStructure.func.substring(0, 1);
-      dartFunc += funcStructure.func.replaceFirst(firstName, firstName.toLowerCase());
+      dartFunc +=
+          funcStructure.func.replaceFirst(firstName, firstName.toLowerCase());
       dartFunc += ' = jscLib.lookup<NativeFunction<';
       // ffi返回值
       if (funcStructure.result != null) {

@@ -49,8 +49,7 @@ class JSContext {
   /// Retains a JavaScript context group.
   /// [@result] (JSContextGroupRef) A JSContextGroup that is the same as group.
   JSContextGroup groupRetain(JSContextGroup group) {
-    return JSContextGroup(
-        JSContextRef.jSContextGroupRetain(group.pointer));
+    return JSContextGroup(JSContextRef.jSContextGroupRetain(group.pointer));
   }
 
   /// Releases a JavaScript context group.
@@ -114,13 +113,15 @@ class JSContext {
     String sourceURL,
     int startingLineNumber = 1,
   }) {
-    return JSValue(this, JSBase.jSEvaluateScript(
-      pointer,
-      JSString.fromString(script).pointer,
-      thisObject == null ? nullptr : thisObject.pointer,
-      sourceURL == null ? nullptr : JSString.fromString(sourceURL).pointer,
-      startingLineNumber ?? 1,
-      exception.pointer,
-    ));
+    return JSValue(
+        this,
+        JSBase.jSEvaluateScript(
+          pointer,
+          JSString.fromString(script).pointer,
+          thisObject == null ? nullptr : thisObject.pointer,
+          sourceURL == null ? nullptr : JSString.fromString(sourceURL).pointer,
+          startingLineNumber ?? 1,
+          exception.pointer,
+        ));
   }
 }
