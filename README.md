@@ -65,7 +65,7 @@ I don't think there is much to describe, flutter_jscore just makes a simple pack
 
 [JavaScriptCore](https://developer.apple.com/documentation/javascriptcore)
 
-[flutter_jscore](https://pub.dartlang.org/documentation/flutter_jscore/latest/)
+[flutter_jscore](https://pub.dev/documentation/flutter_jscore/latest/)
  
  ## Donation
  If you like my project, please in the upper right corner of the project "Star". Your support is my biggest encouragement! ^_^
