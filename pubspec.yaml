@@ -1,8 +1,10 @@
 name: flutter_jscore
 description: JavaScriptCore for Flutter. The plugin provides the ability to evaluate JavaScript programs from within dart.
-version: 0.0.1
+version: 0.1.0
 author: KnoYo
 homepage: https://github.com/xuelongqy/flutter_jscore
+repository: https://github.com/xuelongqy/flutter_jscore
+issue_tracker: https://github.com/xuelongqy/flutter_jscore/issues
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

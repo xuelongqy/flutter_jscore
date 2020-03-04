@@ -50,7 +50,8 @@ class JsCorePageState extends State<JsCorePage> {
     _jsContext.globalObject.setProperty('flutter', flutterJSObject.toValue(),
         JSPropertyAttributes.kJSPropertyAttributeDontDelete);
     // 设置默认JavaScript脚本
-    _jsInputController = TextEditingController(text: '''
+    _jsInputController = TextEditingController(text:
+'''
 function helloJsCore()
 {
     var years = 2000 + 20;
@@ -59,7 +60,7 @@ function helloJsCore()
     return 'JSCore' + (2000 + 20);
 }
 helloJsCore();
-    ''');
+''');
   }
 
   @override
