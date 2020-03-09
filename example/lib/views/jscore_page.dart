@@ -72,7 +72,7 @@ helloJsCore();
   }
 
   /// 绑定JavaScript alert()函数
-  static void alert(
+  static Pointer alert(
       Pointer ctx,
       Pointer function,
       Pointer thisObject,
@@ -83,10 +83,11 @@ helloJsCore();
       _alertDartFunc(
           ctx, function, thisObject, argumentCount, arguments, exception);
     }
+    return nullptr;
   }
 
   static JSObjectCallAsFunctionCallbackDart _alertDartFunc;
-  void _alert(
+  Pointer _alert(
       Pointer ctx,
       Pointer function,
       Pointer thisObject,
@@ -112,10 +113,11 @@ helloJsCore();
             content: Text(msg),
           );
         });
+    return nullptr;
   }
 
   /// 绑定flutter.print()函数
-  static void flutterPrint(
+  static Pointer flutterPrint(
       Pointer ctx,
       Pointer function,
       Pointer thisObject,
@@ -126,10 +128,11 @@ helloJsCore();
       _printDartFunc(
           ctx, function, thisObject, argumentCount, arguments, exception);
     }
+    return nullptr;
   }
 
   static JSObjectCallAsFunctionCallbackDart _printDartFunc;
-  void _print(
+  Pointer _print(
       Pointer ctx,
       Pointer function,
       Pointer thisObject,
@@ -139,6 +142,7 @@ helloJsCore();
     if (argumentCount > 0) {
       print(JSValue(_jsContext, arguments[0]).string);
     }
+    return nullptr;
   }
 
   // 运行JavaScript脚本
