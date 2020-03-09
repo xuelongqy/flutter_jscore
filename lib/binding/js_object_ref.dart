@@ -79,9 +79,9 @@ typedef JSObjectFinalizeCallbackDart = void Function(Pointer object);
 ///
 /// If this callback is NULL, the getProperty callback will be used to service hasProperty requests.
 /// typedef bool (*JSObjectHasPropertyCallback) (JSContextRef ctx, JSObjectRef object, JSStringRef propertyName);
-typedef JSObjectHasPropertyCallback = Void Function(
+typedef JSObjectHasPropertyCallback = Int8 Function(
     Pointer ctx, Pointer object, Pointer propertyName);
-typedef JSObjectHasPropertyCallbackDart = void Function(
+typedef JSObjectHasPropertyCallbackDart = int Function(
     Pointer ctx, Pointer object, Pointer propertyName);
 
 /// typedef JSObjectGetPropertyCallback
@@ -97,9 +97,9 @@ typedef JSObjectHasPropertyCallbackDart = void Function(
 ///
 /// If this function returns NULL, the get request forwards to object's statically declared properties, then its parent class chain (which includes the default object class), then its prototype chain.
 /// typedef JSValueRef (*JSObjectGetPropertyCallback) (JSContextRef ctx, JSObjectRef object, JSStringRef propertyName, JSValueRef* exception);
-typedef JSObjectGetPropertyCallback = Void Function(Pointer ctx, Pointer object,
+typedef JSObjectGetPropertyCallback = Pointer Function(Pointer ctx, Pointer object,
     Pointer propertyName, Pointer<Pointer> exception);
-typedef JSObjectGetPropertyCallbackDart = void Function(Pointer ctx,
+typedef JSObjectGetPropertyCallbackDart = Pointer Function(Pointer ctx,
     Pointer object, Pointer propertyName, Pointer<Pointer> exception);
 
 /// typedef JSObjectSetPropertyCallback
@@ -116,9 +116,9 @@ typedef JSObjectGetPropertyCallbackDart = void Function(Pointer ctx,
 ///
 /// If this function returns false, the set request forwards to object's statically declared properties, then its parent class chain (which includes the default object class).
 /// typedef bool (*JSObjectSetPropertyCallback) (JSContextRef ctx, JSObjectRef object, JSStringRef propertyName, JSValueRef value, JSValueRef* exception);
-typedef JSObjectSetPropertyCallback = Void Function(Pointer ctx, Pointer object,
+typedef JSObjectSetPropertyCallback = Int8 Function(Pointer ctx, Pointer object,
     Pointer propertyName, Pointer value, Pointer<Pointer> exception);
-typedef JSObjectSetPropertyCallbackDart = void Function(
+typedef JSObjectSetPropertyCallbackDart = int Function(
     Pointer ctx,
     Pointer object,
     Pointer propertyName,
@@ -138,9 +138,9 @@ typedef JSObjectSetPropertyCallbackDart = void Function(
 ///
 /// If this function returns false, the delete request forwards to object's statically declared properties, then its parent class chain (which includes the default object class).
 /// typedef bool (*JSObjectDeletePropertyCallback) (JSContextRef ctx, JSObjectRef object, JSStringRef propertyName, JSValueRef* exception);
-typedef JSObjectDeletePropertyCallback = Void Function(Pointer ctx,
+typedef JSObjectDeletePropertyCallback = Int8 Function(Pointer ctx,
     Pointer object, Pointer propertyName, Pointer<Pointer> exception);
-typedef JSObjectDeletePropertyCallbackDart = void Function(Pointer ctx,
+typedef JSObjectDeletePropertyCallbackDart = int Function(Pointer ctx,
     Pointer object, Pointer propertyName, Pointer<Pointer> exception);
 
 /// typedef JSObjectGetPropertyNamesCallback
@@ -178,14 +178,14 @@ typedef JSObjectGetPropertyNamesCallbackDart = void Function(
 ///
 /// If this callback is NULL, calling your object as a function will throw an exception.
 /// typedef JSValueRef (*JSObjectCallAsFunctionCallback) (JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef* exception);
-typedef JSObjectCallAsFunctionCallback = Void Function(
+typedef JSObjectCallAsFunctionCallback = Pointer Function(
     Pointer ctx,
     Pointer function,
     Pointer thisObject,
     Uint32 argumentCount,
     Pointer<Pointer> arguments,
     Pointer<Pointer> exception);
-typedef JSObjectCallAsFunctionCallbackDart = void Function(
+typedef JSObjectCallAsFunctionCallbackDart = Pointer Function(
     Pointer ctx,
     Pointer function,
     Pointer thisObject,
@@ -209,13 +209,13 @@ typedef JSObjectCallAsFunctionCallbackDart = void Function(
 ///
 /// If this callback is NULL, using your object as a constructor in a 'new' expression will throw an exception.
 /// typedef JSObjectRef (*JSObjectCallAsConstructorCallback) (JSContextRef ctx, JSObjectRef constructor, size_t argumentCount, const JSValueRef arguments[], JSValueRef* exception);
-typedef JSObjectCallAsConstructorCallback = Void Function(
+typedef JSObjectCallAsConstructorCallback = Pointer Function(
     Pointer ctx,
     Pointer constructor,
     Uint32 argumentCount,
     Pointer<Pointer> arguments,
     Pointer<Pointer> exception);
-typedef JSObjectCallAsConstructorCallbackDart = void Function(
+typedef JSObjectCallAsConstructorCallbackDart = Pointer Function(
     Pointer ctx,
     Pointer constructor,
     int argumentCount,
@@ -239,9 +239,9 @@ typedef JSObjectCallAsConstructorCallbackDart = void Function(
 ///
 /// Standard JavaScript practice calls for objects that implement the callAsConstructor callback to implement the hasInstance callback as well.
 /// typedef bool (*JSObjectHasInstanceCallback)  (JSContextRef ctx, JSObjectRef constructor, JSValueRef possibleInstance, JSValueRef* exception);
-typedef JSObjectHasInstanceCallback = Void Function(Pointer ctx,
+typedef JSObjectHasInstanceCallback = Int8 Function(Pointer ctx,
     Pointer constructor, Pointer possibleInstance, Pointer<Pointer> exception);
-typedef JSObjectHasInstanceCallbackDart = void Function(Pointer ctx,
+typedef JSObjectHasInstanceCallbackDart = int Function(Pointer ctx,
     Pointer constructor, Pointer possibleInstance, Pointer<Pointer> exception);
 
 /// typedef JSObjectConvertToTypeCallback
@@ -259,9 +259,9 @@ typedef JSObjectHasInstanceCallbackDart = void Function(Pointer ctx,
 ///
 /// This function is only invoked when converting an object to number or string. An object converted to boolean is 'true.' An object converted to object is itself.
 /// typedef JSValueRef (*JSObjectConvertToTypeCallback) (JSContextRef ctx, JSObjectRef object, JSType type, JSValueRef* exception);
-typedef JSObjectConvertToTypeCallback = Void Function(
+typedef JSObjectConvertToTypeCallback = Pointer Function(
     Pointer ctx, Pointer object, Int8 type, Pointer<Pointer> exception);
-typedef JSObjectConvertToTypeCallbackDart = void Function(
+typedef JSObjectConvertToTypeCallbackDart = Pointer Function(
     Pointer ctx, Pointer object, int type, Pointer<Pointer> exception);
 
 /// struct JSStaticValue
