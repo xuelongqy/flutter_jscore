@@ -51,6 +51,12 @@ Evaluate JavaScript programs from within an app, and support JavaScript scriptin
 
 [Documentation](https://developer.apple.com/documentation/javascriptcore)
 
+## dart:ffi
+
+Foreign Function Interface for interoperability with the C programming language. flutter_jscore uses dart:ffi so you don't have to worry about performance loss across programming languages.
+
+[dart:ffi](https://api.dart.dev/stable/dart-ffi/dart-ffi-library.html)
+
 ## Supported platforms
 
  - iOS (7.0+) 
