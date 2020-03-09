@@ -46,17 +46,6 @@ class JSContext {
             group == null ? JSContextRef.jSContextGroupCreate() : group.pointer,
             globalObjectClass == null ? nullptr : globalObjectClass.pointer);
 
-  /// Retains a JavaScript context group.
-  /// [@result] (JSContextGroupRef) A JSContextGroup that is the same as group.
-  JSContextGroup groupRetain(JSContextGroup group) {
-    return JSContextGroup(JSContextRef.jSContextGroupRetain(group.pointer));
-  }
-
-  /// Releases a JavaScript context group.
-  void groupRelease() {
-    return JSContextRef.jSContextGroupRelease(group.pointer);
-  }
-
   /// Retains a global JavaScript execution context.
   /// [@result] (JSGlobalContext) A JSGlobalContext that is the same as ctx.
   void retain() {
