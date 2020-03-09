@@ -97,8 +97,8 @@ typedef JSObjectHasPropertyCallbackDart = int Function(
 ///
 /// If this function returns NULL, the get request forwards to object's statically declared properties, then its parent class chain (which includes the default object class), then its prototype chain.
 /// typedef JSValueRef (*JSObjectGetPropertyCallback) (JSContextRef ctx, JSObjectRef object, JSStringRef propertyName, JSValueRef* exception);
-typedef JSObjectGetPropertyCallback = Pointer Function(Pointer ctx, Pointer object,
-    Pointer propertyName, Pointer<Pointer> exception);
+typedef JSObjectGetPropertyCallback = Pointer Function(Pointer ctx,
+    Pointer object, Pointer propertyName, Pointer<Pointer> exception);
 typedef JSObjectGetPropertyCallbackDart = Pointer Function(Pointer ctx,
     Pointer object, Pointer propertyName, Pointer<Pointer> exception);
 
