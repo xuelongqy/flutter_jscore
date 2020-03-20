@@ -277,7 +277,7 @@ class JSStaticValue extends Struct {
   Pointer<NativeFunction<JSObjectSetPropertyCallback>> setProperty;
 
   /// (unsigned) A logically ORed set of [JSPropertyAttributes] to give to the property.
-  @IntPtr()
+  @Uint32()
   int attributes;
 
   factory JSStaticValue.fromAddress(int ptr) =>
@@ -356,7 +356,7 @@ class JSStaticFunction extends Struct {
   Pointer<NativeFunction<JSObjectCallAsFunctionCallback>> callAsFunction;
 
   /// (unsigned) A logically ORed set of [JSPropertyAttributes] to give to the property.
-  @IntPtr()
+  @Uint32()
   int attributes;
 
   factory JSStaticFunction.fromAddress(int ptr) =>
