@@ -41,6 +41,8 @@ flutter:
         pluginClass: FlutterJscorePlugin
       macos:
         pluginClass: FlutterJscorePlugin
+      windows:
+        pluginClass: FlutterJscorePlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
