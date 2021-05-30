@@ -1,7 +1,6 @@
 import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
-import 'package:flutter/cupertino.dart';
 
 import 'jsc_ffi.dart';
 
@@ -268,64 +267,39 @@ typedef JSObjectConvertToTypeCallbackDart = Pointer Function(
 /// This structure describes a statically declared value property.
 class JSStaticValue extends Struct {
   /// (const char* ) A null-terminated UTF8 string containing the property's name.
-  Pointer<Utf8> name;
+  Pointer<Utf8>? name;
 
   /// (JSObjectGetPropertyCallback) A JSObjectGetPropertyCallback to invoke when getting the property's value.
-  Pointer<NativeFunction<JSObjectGetPropertyCallback>> getProperty;
+  Pointer<NativeFunction<JSObjectGetPropertyCallback>>? getProperty;
 
   /// (JSObjectSetPropertyCallback) A JSObjectSetPropertyCallback to invoke when setting the property's value. May be NULL if the ReadOnly attribute is set.
-  Pointer<NativeFunction<JSObjectSetPropertyCallback>> setProperty;
+  Pointer<NativeFunction<JSObjectSetPropertyCallback>>? setProperty;
 
   /// (unsigned) A logically ORed set of [JSPropertyAttributes] to give to the property.
   @Uint32()
-  int attributes;
-
-  factory JSStaticValue.fromAddress(int ptr) =>
-      Pointer<JSStaticValue>.fromAddress(ptr).ref;
-
-  factory JSStaticValue.allocate({
-    @required Pointer<Utf8> name,
-    @required Pointer<NativeFunction<JSObjectGetPropertyCallback>> getProperty,
-    @required Pointer<NativeFunction<JSObjectSetPropertyCallback>> setProperty,
-    @required int attributes,
-  }) =>
-      allocate<JSStaticValue>().ref
-        ..name = name ?? nullptr
-        ..getProperty = getProperty ?? nullptr
-        ..setProperty = setProperty ?? nullptr
-        ..attributes =
-            attributes ?? JSPropertyAttributes.kJSPropertyAttributeNone;
-
-  factory JSStaticValue.fromStruct(JSStaticValueStruct struct) =>
-      allocate<JSStaticValue>().ref
-        ..name = struct.name
-        ..setProperty = struct.setProperty
-        ..getProperty = struct.getProperty
-        ..attributes = struct.attributes;
-
-  factory JSStaticValue.allocateArray(List<JSStaticValueStruct> structList) {
-    if (structList == null || structList.isEmpty) {
-      return null;
-    }
-    var jSStaticValues =
-        allocate<JSStaticValue>(count: structList.length + 1).ref;
-    for (int index = 0; index < structList.length; index++) {
-      jSStaticValues[index].setValue(structList[index]);
-    }
-    jSStaticValues[structList.length].setValue(JSStaticValueStruct());
-    return jSStaticValues;
-  }
-
-  JSStaticValue operator [](int index) {
-    return JSStaticValue.fromAddress(
-        this.addressOf.address + index * sizeOf<JSStaticValue>());
-  }
+  int? attributes;
 
   void setValue(JSStaticValueStruct struct) {
     this.name = struct.name;
     this.setProperty = struct.setProperty;
     this.getProperty = struct.getProperty;
     this.attributes = struct.attributes;
+  }
+}
+
+extension JSStaticValuePointer on Pointer<JSStaticValue> {
+  static Pointer<JSStaticValue> allocate(JSStaticValueStruct struct) {
+    return malloc.call<JSStaticValue>(1)..ref.setValue(struct);
+  }
+
+  static Pointer<JSStaticValue> allocateArray(
+      List<JSStaticValueStruct> structList) {
+    final pointer = malloc.call<JSStaticValue>(structList.length + 1);
+    for (int index = 0; index < structList.length; index++) {
+      pointer[index].setValue(structList[index]);
+    }
+    pointer[structList.length].setValue(JSStaticValueStruct());
+    return pointer;
   }
 }
 
@@ -336,73 +310,49 @@ class JSStaticValueStruct {
   int attributes;
 
   JSStaticValueStruct({
-    Pointer<Utf8> name,
-    Pointer<NativeFunction<JSObjectGetPropertyCallback>> getProperty,
-    Pointer<NativeFunction<JSObjectSetPropertyCallback>> setProperty,
-    int attributes,
+    Pointer<Utf8>? name,
+    Pointer<NativeFunction<JSObjectGetPropertyCallback>>? getProperty,
+    Pointer<NativeFunction<JSObjectSetPropertyCallback>>? setProperty,
+    int attributes: JSPropertyAttributes.kJSPropertyAttributeNone,
   })  : this.name = name ?? nullptr,
         this.getProperty = getProperty ?? nullptr,
         this.setProperty = setProperty ?? nullptr,
-        this.attributes = 0;
+        this.attributes = attributes;
 }
 
 /// struct JSStaticFunction
 /// This structure describes a statically declared function property.
 class JSStaticFunction extends Struct {
   /// (const char* ) A null-terminated UTF8 string containing the property's name.
-  Pointer<Utf8> name;
+  Pointer<Utf8>? name;
 
   /// (JSObjectCallAsFunctionCallback) A JSObjectCallAsFunctionCallback to invoke when the property is called as a function.
-  Pointer<NativeFunction<JSObjectCallAsFunctionCallback>> callAsFunction;
+  Pointer<NativeFunction<JSObjectCallAsFunctionCallback>>? callAsFunction;
 
   /// (unsigned) A logically ORed set of [JSPropertyAttributes] to give to the property.
   @Uint32()
-  int attributes;
-
-  factory JSStaticFunction.fromAddress(int ptr) =>
-      Pointer<JSStaticFunction>.fromAddress(ptr).ref;
-
-  factory JSStaticFunction.allocate({
-    @required Pointer<Utf8> name,
-    @required
-        Pointer<NativeFunction<JSObjectCallAsFunctionCallback>> callAsFunction,
-    @required int attributes,
-  }) =>
-      allocate<JSStaticFunction>().ref
-        ..name = name ?? nullptr
-        ..callAsFunction = callAsFunction ?? nullptr
-        ..attributes =
-            attributes ?? JSPropertyAttributes.kJSPropertyAttributeNone;
-
-  factory JSStaticFunction.fromStruct(JSStaticFunctionStruct struct) =>
-      allocate<JSStaticFunction>().ref
-        ..name = struct.name
-        ..callAsFunction = struct.callAsFunction
-        ..attributes = struct.attributes;
-
-  factory JSStaticFunction.allocateArray(
-      List<JSStaticFunctionStruct> structList) {
-    if (structList == null || structList.isEmpty) {
-      return null;
-    }
-    var jSStaticFunctions =
-        allocate<JSStaticFunction>(count: structList.length + 1).ref;
-    for (int index = 0; index < structList.length; index++) {
-      jSStaticFunctions[index].setValue(structList[index]);
-    }
-    jSStaticFunctions[structList.length].setValue(JSStaticFunctionStruct());
-    return jSStaticFunctions;
-  }
-
-  JSStaticFunction operator [](int index) {
-    return JSStaticFunction.fromAddress(
-        this.addressOf.address + index * sizeOf<JSStaticFunction>());
-  }
+  int? attributes;
 
   void setValue(JSStaticFunctionStruct struct) {
     this.name = struct.name;
     this.callAsFunction = struct.callAsFunction;
     this.attributes = struct.attributes;
+  }
+}
+
+extension JSStaticFunctionPointer on Pointer<JSStaticFunction> {
+  static Pointer<JSStaticFunction> allocate(JSStaticFunctionStruct struct) {
+    return malloc.call<JSStaticFunction>(1)..ref.setValue(struct);
+  }
+
+  static Pointer<JSStaticFunction> allocateArray(
+      List<JSStaticFunctionStruct> structList) {
+    final pointer = malloc.call<JSStaticFunction>(structList.length + 1);
+    for (int index = 0; index < structList.length; index++) {
+      pointer[index].setValue(structList[index]);
+    }
+    pointer[structList.length].setValue(JSStaticFunctionStruct());
+    return pointer;
   }
 }
 
@@ -412,12 +362,12 @@ class JSStaticFunctionStruct {
   int attributes;
 
   JSStaticFunctionStruct({
-    Pointer<Utf8> name,
-    Pointer<NativeFunction<JSObjectCallAsFunctionCallback>> callAsFunction,
-    int attributes,
+    Pointer<Utf8>? name,
+    Pointer<NativeFunction<JSObjectCallAsFunctionCallback>>? callAsFunction,
+    int attributes = JSPropertyAttributes.kJSPropertyAttributeNone,
   })  : this.name = name ?? nullptr,
         this.callAsFunction = callAsFunction ?? nullptr,
-        this.attributes = 0;
+        this.attributes = attributes;
 }
 
 /// struct JSStaticFunction
@@ -436,104 +386,98 @@ class JSStaticFunctionStruct {
 class JSClassDefinition extends Struct {
   /// (int) The version number of this structure. The current version is 0.
   @Int32()
-  int version;
+  int? version;
 
   /// (JSClassAttributes) A logically ORed set of [JSClassAttributes] to give to the class.
   @Int16()
-  int attributes;
+  int? attributes;
 
   /// (const char* ) A null-terminated UTF8 string containing the class's name.
-  Pointer<Utf8> className;
+  Pointer<Utf8>? className;
 
   /// (JSClassRef) A JSClass to set as the class's parent class. Pass NULL use the default object class.
-  Pointer parentClass;
+  Pointer? parentClass;
 
   /// (const JSStaticValue*) A JSStaticValue array containing the class's statically declared value properties. Pass NULL to specify no statically declared value properties. The array must be terminated by a JSStaticValue whose name field is NULL.
-  Pointer<JSStaticValue> staticValues;
+  Pointer<JSStaticValue>? staticValues;
 
   /// (const JSStaticFunction*) A JSStaticFunction array containing the class's statically declared function properties. Pass NULL to specify no statically declared function properties. The array must be terminated by a JSStaticFunction whose name field is NULL.
-  Pointer<JSStaticFunction> staticFunctions;
+  Pointer<JSStaticFunction>? staticFunctions;
 
   /// (JSObjectInitializeCallback) The callback invoked when an object is first created. Use this callback to initialize the object.
-  Pointer<NativeFunction<JSObjectInitializeCallback>> initialize;
+  Pointer<NativeFunction<JSObjectInitializeCallback>>? initialize;
 
   /// (JSObjectFinalizeCallback) The callback invoked when an object is finalized (prepared for garbage collection). Use this callback to release resources allocated for the object, and perform other cleanup.
-  Pointer<NativeFunction<JSObjectFinalizeCallback>> finalize;
+  Pointer<NativeFunction<JSObjectFinalizeCallback>>? finalize;
 
   /// (JSObjectHasPropertyCallback) The callback invoked when determining whether an object has a property. If this field is NULL, getProperty is called instead. The hasProperty callback enables optimization in cases where only a property's existence needs to be known, not its value, and computing its value is expensive.
-  Pointer<NativeFunction<JSObjectHasPropertyCallback>> hasProperty;
+  Pointer<NativeFunction<JSObjectHasPropertyCallback>>? hasProperty;
 
   /// (JSObjectGetPropertyCallback) The callback invoked when getting a property's value.
-  Pointer<NativeFunction<JSObjectGetPropertyCallback>> getProperty;
+  Pointer<NativeFunction<JSObjectGetPropertyCallback>>? getProperty;
 
   /// (JSObjectSetPropertyCallback) The callback invoked when setting a property's value.
-  Pointer<NativeFunction<JSObjectSetPropertyCallback>> setProperty;
+  Pointer<NativeFunction<JSObjectSetPropertyCallback>>? setProperty;
 
   /// (JSObjectDeletePropertyCallback) The callback invoked when deleting a property.
-  Pointer<NativeFunction<JSObjectDeletePropertyCallback>> deleteProperty;
+  Pointer<NativeFunction<JSObjectDeletePropertyCallback>>? deleteProperty;
 
   /// (JSObjectGetPropertyNamesCallback) The callback invoked when collecting the names of an object's properties.
-  Pointer<NativeFunction<JSObjectGetPropertyNamesCallback>> getPropertyNames;
+  Pointer<NativeFunction<JSObjectGetPropertyNamesCallback>>? getPropertyNames;
 
   /// (JSObjectCallAsFunctionCallback) The callback invoked when an object is called as a function.
-  Pointer<NativeFunction<JSObjectCallAsFunctionCallback>> callAsFunction;
+  Pointer<NativeFunction<JSObjectCallAsFunctionCallback>>? callAsFunction;
 
   /// (JSObjectCallAsConstructorCallback) The callback invoked when an object is used as the target of an 'instanceof' expression.
-  Pointer<NativeFunction<JSObjectCallAsConstructorCallback>> callAsConstructor;
+  Pointer<NativeFunction<JSObjectCallAsConstructorCallback>>? callAsConstructor;
 
   /// (JSObjectHasInstanceCallback) The callback invoked when an object is used as a constructor in a 'new' expression.
-  Pointer<NativeFunction<JSObjectHasInstanceCallback>> hasInstance;
+  Pointer<NativeFunction<JSObjectHasInstanceCallback>>? hasInstance;
 
   /// (JSObjectConvertToTypeCallback) The callback invoked when converting an object to a particular JavaScript type.
-  Pointer<NativeFunction<JSObjectConvertToTypeCallback>> convertToType;
+  Pointer<NativeFunction<JSObjectConvertToTypeCallback>>? convertToType;
+}
 
-  factory JSClassDefinition.allocate({
-    @required int version,
-    @required int attributes,
-    @required Pointer<Utf8> className,
-    @required Pointer parentClass,
-    @required Pointer<JSStaticValue> staticValues,
-    @required Pointer<JSStaticFunction> staticFunctions,
-    @required Pointer<NativeFunction<JSObjectInitializeCallback>> initialize,
-    @required Pointer<NativeFunction<JSObjectFinalizeCallback>> finalize,
-    @required Pointer<NativeFunction<JSObjectHasPropertyCallback>> hasProperty,
-    @required Pointer<NativeFunction<JSObjectGetPropertyCallback>> getProperty,
-    @required Pointer<NativeFunction<JSObjectSetPropertyCallback>> setProperty,
-    @required
-        Pointer<NativeFunction<JSObjectDeletePropertyCallback>> deleteProperty,
-    @required
-        Pointer<NativeFunction<JSObjectGetPropertyNamesCallback>>
-            getPropertyNames,
-    @required
-        Pointer<NativeFunction<JSObjectCallAsFunctionCallback>> callAsFunction,
-    @required
-        Pointer<NativeFunction<JSObjectCallAsConstructorCallback>>
-            callAsConstructor,
-    @required Pointer<NativeFunction<JSObjectHasInstanceCallback>> hasInstance,
-    @required
-        Pointer<NativeFunction<JSObjectConvertToTypeCallback>> convertToType,
-  }) =>
-      allocate<JSClassDefinition>().ref
-        ..version = version ?? 0
-        ..attributes = attributes ?? JSClassAttributes.kJSClassAttributeNone
-        ..className = className ?? nullptr
-        ..parentClass = parentClass ?? nullptr
-        ..staticValues = staticValues ?? nullptr
-        ..staticFunctions = staticFunctions ?? nullptr
-        ..initialize = initialize ?? nullptr
-        ..finalize = finalize ?? nullptr
-        ..hasProperty = hasProperty ?? nullptr
-        ..getProperty = getProperty ?? nullptr
-        ..setProperty = setProperty ?? nullptr
-        ..deleteProperty = deleteProperty ?? nullptr
-        ..getPropertyNames = getPropertyNames ?? nullptr
-        ..callAsFunction = callAsFunction ?? nullptr
-        ..callAsConstructor = callAsConstructor ?? nullptr
-        ..hasInstance = hasInstance ?? nullptr
-        ..convertToType = convertToType ?? nullptr;
-
-  /*factory JSClassDefinition.empty() =>
-      jscLib.lookup<JSClassDefinition>('kJSClassDefinitionEmpty').ref;*/
+extension JSClassDefinitionPointer on Pointer<JSClassDefinition> {
+  static Pointer<JSClassDefinition> allocate({
+    int version = 0,
+    int attributes = JSClassAttributes.kJSClassAttributeNone,
+    required Pointer<Utf8> className,
+    Pointer? parentClass,
+    Pointer<JSStaticValue>? staticValues,
+    Pointer<JSStaticFunction>? staticFunctions,
+    Pointer<NativeFunction<JSObjectInitializeCallback>>? initialize,
+    Pointer<NativeFunction<JSObjectFinalizeCallback>>? finalize,
+    Pointer<NativeFunction<JSObjectHasPropertyCallback>>? hasProperty,
+    Pointer<NativeFunction<JSObjectGetPropertyCallback>>? getProperty,
+    Pointer<NativeFunction<JSObjectSetPropertyCallback>>? setProperty,
+    Pointer<NativeFunction<JSObjectDeletePropertyCallback>>? deleteProperty,
+    Pointer<NativeFunction<JSObjectGetPropertyNamesCallback>>? getPropertyNames,
+    Pointer<NativeFunction<JSObjectCallAsFunctionCallback>>? callAsFunction,
+    Pointer<NativeFunction<JSObjectCallAsConstructorCallback>>?
+        callAsConstructor,
+    Pointer<NativeFunction<JSObjectHasInstanceCallback>>? hasInstance,
+    Pointer<NativeFunction<JSObjectConvertToTypeCallback>>? convertToType,
+  }) {
+    return malloc.call<JSClassDefinition>(1)
+      ..ref.version = version
+      ..ref.attributes = attributes
+      ..ref.className = className
+      ..ref.parentClass = parentClass ?? nullptr
+      ..ref.staticValues = staticValues ?? nullptr
+      ..ref.staticFunctions = staticFunctions ?? nullptr
+      ..ref.initialize = initialize ?? nullptr
+      ..ref.finalize = finalize ?? nullptr
+      ..ref.hasProperty = hasProperty ?? nullptr
+      ..ref.getProperty = getProperty ?? nullptr
+      ..ref.setProperty = setProperty ?? nullptr
+      ..ref.deleteProperty = deleteProperty ?? nullptr
+      ..ref.getPropertyNames = getPropertyNames ?? nullptr
+      ..ref.callAsFunction = callAsFunction ?? nullptr
+      ..ref.callAsConstructor = callAsConstructor ?? nullptr
+      ..ref.hasInstance = hasInstance ?? nullptr
+      ..ref.convertToType = convertToType ?? nullptr;
+  }
 }
 
 /// Creates a JavaScript class suitable for use with JSObjectMake.

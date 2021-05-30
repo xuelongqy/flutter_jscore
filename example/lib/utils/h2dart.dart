@@ -1,7 +1,7 @@
 /// 内容结构
 class ContentStructure {
   /// 方法结构
-  List<FuncStructure> funcStructures;
+  List<FuncStructure>? funcStructures;
 
   ContentStructure({this.funcStructures});
 }
@@ -17,27 +17,27 @@ class FuncStructure {
   });
 
   // 摘要
-  List<String> abstract;
+  List<String?>? abstract;
   // 描述
-  List<String> discussion;
+  List<String?>? discussion;
   // 参数
-  List<Value> params;
+  List<Value>? params;
   // 返回结果
-  Value result;
+  Value? result;
   // 方法
-  String func;
+  String? func;
 }
 
 /// 参数或返回值
 class Value {
   /// 名字
-  String name;
+  String? name;
 
   /// 类型
-  String type;
+  String? type;
 
   /// 摘要
-  String abstract;
+  String? abstract;
 }
 
 // 头文件转dart
@@ -63,10 +63,10 @@ ContentStructure readH(String content) {
   // 分行
   List<String> lines = content.split('\n');
   // 缓存参数
-  FuncStructure funStructure;
-  List<Value> params;
-  Map<String, String> paramsAbstract;
-  Map<String, String> resultAbstract;
+  FuncStructure? funStructure;
+  List<Value>? params;
+  Map<String, String>? paramsAbstract;
+  Map<String, String>? resultAbstract;
   // 解析
   for (int i = 0; i < lines.length; i++) {
     String line = lines[i].trim();
@@ -162,7 +162,7 @@ ContentStructure readH(String content) {
         Value value = Value();
         value.name = '@result';
         value.type = line.split(' ')[1];
-        value.abstract = resultAbstract['@result'];
+        value.abstract = resultAbstract!['@result'];
         funStructure.result = value;
         // 方法名称
         if (line.split(' ')[2] == 'const') {
@@ -189,35 +189,33 @@ ContentStructure readH(String content) {
             value.type = paramSplits[0].trim();
             value.name = paramSplits[1].trim();
             // 判断是否为指针
-            if (value.name.startsWith('*')) {
+            if (value.name!.startsWith('*')) {
               int start = 0;
               String pointer = '';
               while (true) {
-                int nextStart = value.name.indexOf('*', start);
+                int nextStart = value.name!.indexOf('*', start);
                 if (nextStart < 0) break;
                 start = nextStart + 1;
                 pointer += '*';
               }
-              value.name = value.name.replaceAll(pointer, '');
-              value.type += pointer;
+              value.name = value.name!.replaceAll(pointer, '');
+              value.type = '${value.type}pointer';
             }
             // 判断数组
-            if (value.name.endsWith('[]')) {
-              value.name = value.name.replaceAll('[]', '');
-              value.type += '[]';
+            if (value.name!.endsWith('[]')) {
+              value.name = value.name!.replaceAll('[]', '');
+              value.type = '${value.type}[]';
             }
-            value.abstract = paramsAbstract[value.name];
-            params.add(value);
+            value.abstract = paramsAbstract![value.name];
+            params!.add(value);
           });
         }
-        funStructure?.params = params;
-        if (funStructure != null) {
-          funcStructures.add(funStructure);
-          funStructure = null;
-          params = null;
-          paramsAbstract = null;
-          resultAbstract = null;
-        }
+        funStructure.params = params;
+        funcStructures.add(funStructure);
+        funStructure = null;
+        params = null;
+        paramsAbstract = null;
+        resultAbstract = null;
       }
     }
   }
@@ -237,73 +235,73 @@ import 'jsc_ffi.dart';
   String dartContent = importContent;
   // 方法
   if (contentStructure.funcStructures != null &&
-      contentStructure.funcStructures.isNotEmpty) {
-    contentStructure.funcStructures.forEach((funcStructure) {
+      contentStructure.funcStructures!.isNotEmpty) {
+    contentStructure.funcStructures!.forEach((funcStructure) {
       // 摘要
-      if (funcStructure.abstract != null && funcStructure.abstract.isNotEmpty) {
-        funcStructure.abstract.forEach((item) {
+      if (funcStructure.abstract != null && funcStructure.abstract!.isNotEmpty) {
+        funcStructure.abstract!.forEach((item) {
           dartContent += '\n /// ${item ?? ''}';
         });
       }
       // 描述
       if (funcStructure.discussion != null &&
-          funcStructure.discussion.isNotEmpty) {
-        funcStructure.discussion.forEach((item) {
+          funcStructure.discussion!.isNotEmpty) {
+        funcStructure.discussion!.forEach((item) {
           dartContent += '\n /// ${item ?? ''}';
         });
       }
       // 参数
-      if (funcStructure.params != null && funcStructure.params.isNotEmpty) {
-        funcStructure.params.forEach((param) {
+      if (funcStructure.params != null && funcStructure.params!.isNotEmpty) {
+        funcStructure.params!.forEach((param) {
           dartContent +=
               '\n /// ${param.name != null ? '[${param.name}]' : ''} ${param.type != null ? '(${param.type})' : ''} ${param.abstract ?? ''}';
         });
       }
       // 返回值
-      if (funcStructure.result != null && funcStructure.result.type != 'void') {
+      if (funcStructure.result != null && funcStructure.result!.type != 'void') {
         dartContent +=
-            '\n /// ${funcStructure.result.name != null ? '[${funcStructure.result.name}]' : ''} ${funcStructure.result.type != null ? '(${funcStructure.result.type})' : ''} ${funcStructure.result.abstract ?? ''}';
+            '\n /// ${funcStructure.result!.name != null ? '[${funcStructure.result!.name}]' : ''} ${funcStructure.result!.type != null ? '(${funcStructure.result!.type})' : ''} ${funcStructure.result!.abstract ?? ''}';
       }
       // 方法
       String dartFunc = '\nfinal';
       // dart返回值
       if (funcStructure.result != null) {
-        dartFunc += ' ${typeC2Dart(funcStructure.result.type)}';
+        dartFunc += ' ${typeC2Dart(funcStructure.result!.type!)}';
       } else {
         dartFunc += ' ${typeC2Dart('void')}';
       }
       // dart方法
       dartFunc += ' Function(';
-      if (funcStructure.params != null && funcStructure.params.isNotEmpty) {
-        for (int i = 0; i < funcStructure.params.length; i++) {
-          Value param = funcStructure.params[i];
+      if (funcStructure.params != null && funcStructure.params!.isNotEmpty) {
+        for (int i = 0; i < funcStructure.params!.length; i++) {
+          Value param = funcStructure.params![i];
           if (i != 0) {
             dartFunc += ', ';
           }
-          dartFunc += '${typeC2Dart(param.type)} ${param.name}';
+          dartFunc += '${typeC2Dart(param.type!)} ${param.name}';
         }
       }
       dartFunc += ') ';
       // dart方法名
-      String firstName = funcStructure.func.substring(0, 1);
+      String firstName = funcStructure.func!.substring(0, 1);
       dartFunc +=
-          funcStructure.func.replaceFirst(firstName, firstName.toLowerCase());
+          funcStructure.func!.replaceFirst(firstName, firstName.toLowerCase());
       dartFunc += ' = jscLib.lookup<NativeFunction<';
       // ffi返回值
       if (funcStructure.result != null) {
-        dartFunc += '${typeC2DartFfi(funcStructure.result.type)}';
+        dartFunc += '${typeC2DartFfi(funcStructure.result!.type!)}';
       } else {
         dartFunc += ' ${typeC2Dart('void')}';
       }
       // ffi方法
       dartFunc += ' Function(';
-      if (funcStructure.params != null && funcStructure.params.isNotEmpty) {
-        for (int i = 0; i < funcStructure.params.length; i++) {
-          Value param = funcStructure.params[i];
+      if (funcStructure.params != null && funcStructure.params!.isNotEmpty) {
+        for (int i = 0; i < funcStructure.params!.length; i++) {
+          Value param = funcStructure.params![i];
           if (i != 0) {
             dartFunc += ', ';
           }
-          dartFunc += '${typeC2DartFfi(param.type)}';
+          dartFunc += '${typeC2DartFfi(param.type!)}';
         }
       }
       dartFunc += ')>>';

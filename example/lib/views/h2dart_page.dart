@@ -10,8 +10,8 @@ class H2DartPage extends StatefulWidget {
 }
 
 class H2DartPageState extends State<H2DartPage> {
-  TextEditingController _hController;
-  TextEditingController _dartController;
+  late TextEditingController _hController;
+  late TextEditingController _dartController;
 
   @override
   void initState() {

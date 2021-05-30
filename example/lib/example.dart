@@ -20,8 +20,8 @@ class _JSCorePage extends StatefulWidget {
 }
 
 class _JSCorePageState extends State<_JSCorePage> {
-  TextEditingController _jsInputController;
-  JSContext _jsContext;
+  late TextEditingController _jsInputController;
+  late JSContext _jsContext;
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class _JSCorePageState extends State<_JSCorePage> {
 
   String _runJs(String script) {
     var jsValue = _jsContext.evaluate(script);
-    return jsValue.string;
+    return jsValue.string ?? 'No result';
   }
 
   @override
@@ -62,7 +62,7 @@ class _JSCorePageState extends State<_JSCorePage> {
             builder: (context) {
               return AlertDialog(
                 title: Text('Result'),
-                content: Text(_runJs(_jsInputController.text ?? '')),
+                content: Text(_runJs(_jsInputController.text)),
               );
             },
           );

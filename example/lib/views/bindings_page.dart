@@ -15,15 +15,15 @@ class BindingsPage extends StatefulWidget {
 
 class BindingsPageState extends State<BindingsPage> {
   // 输入控制器
-  TextEditingController _jsInputController;
+  late TextEditingController _jsInputController;
 
   // 结果
-  String _result;
+  String? _result;
 
   // Jsc上下文
-  Pointer contextGroup;
-  Pointer globalContext;
-  Pointer globalObject;
+  late Pointer contextGroup;
+  late Pointer globalContext;
+  late Pointer globalObject;
 
   @override
   void initState() {
@@ -34,7 +34,7 @@ class BindingsPageState extends State<BindingsPage> {
     globalObject = jSContextGetGlobalObject(globalContext);
     // 注册alert方法
     _alertDartFunc = _alert;
-    Pointer<Utf8> funcNameCString = Utf8.toUtf8('alert');
+    Pointer<Utf8> funcNameCString = 'alert'.toNativeUtf8();
     var functionObject = jSObjectMakeFunctionWithCallback(
         globalContext,
         jSStringCreateWithUTF8CString(funcNameCString),
@@ -46,23 +46,23 @@ class BindingsPageState extends State<BindingsPage> {
         functionObject,
         JSPropertyAttributes.kJSPropertyAttributeNone,
         nullptr);
-    free(funcNameCString);
+    malloc.free(funcNameCString);
     // 注册flutter.print静态方法
     _printDartFunc = _print;
-    var staticFunctions = JSStaticFunction.allocateArray([
+    var staticFunctions = JSStaticFunctionPointer.allocateArray([
       JSStaticFunctionStruct(
-        name: Utf8.toUtf8('print'),
+        name: 'print'.toNativeUtf8(),
         callAsFunction: Pointer.fromFunction(flutterPrint),
         attributes: JSPropertyAttributes.kJSPropertyAttributeNone,
       ),
     ]);
-    var definition = JSClassDefinition.allocate(
+    var definition = JSClassDefinitionPointer.allocate(
       version: 0,
       attributes: JSClassAttributes.kJSClassAttributeNone,
-      className: Utf8.toUtf8('flutter'),
+      className: 'flutter'.toNativeUtf8(),
       parentClass: null,
       staticValues: null,
-      staticFunctions: staticFunctions.addressOf,
+      staticFunctions: staticFunctions,
       initialize: null,
       finalize: null,
       hasProperty: null,
@@ -75,9 +75,9 @@ class BindingsPageState extends State<BindingsPage> {
       hasInstance: null,
       convertToType: null,
     );
-    var flutterJSClass = jSClassCreate(definition.addressOf);
+    var flutterJSClass = jSClassCreate(definition);
     var flutterJSObject = jSObjectMake(globalContext, flutterJSClass, nullptr);
-    Pointer<Utf8> flutterCString = Utf8.toUtf8('flutter');
+    Pointer<Utf8> flutterCString = 'flutter'.toNativeUtf8();
     jSObjectSetProperty(
         globalContext,
         globalObject,
@@ -85,7 +85,7 @@ class BindingsPageState extends State<BindingsPage> {
         flutterJSObject,
         JSPropertyAttributes.kJSPropertyAttributeDontDelete,
         nullptr);
-    free(flutterCString);
+    malloc.free(flutterCString);
     // 设置默认JavaScript脚本
     _jsInputController = TextEditingController(text: '''
 function helloJsCore()
@@ -116,13 +116,13 @@ helloJsCore();
       Pointer<Pointer> arguments,
       Pointer<Pointer> exception) {
     if (_alertDartFunc != null) {
-      _alertDartFunc(
+      _alertDartFunc!(
           ctx, function, thisObject, argumentCount, arguments, exception);
     }
     return nullptr;
   }
 
-  static JSObjectCallAsFunctionCallbackDart _alertDartFunc;
+  static JSObjectCallAsFunctionCallbackDart? _alertDartFunc;
   Pointer _alert(
       Pointer ctx,
       Pointer function,
@@ -161,13 +161,13 @@ helloJsCore();
       Pointer<Pointer> arguments,
       Pointer<Pointer> exception) {
     if (_printDartFunc != null) {
-      _printDartFunc(
+      _printDartFunc!(
           ctx, function, thisObject, argumentCount, arguments, exception);
     }
     return nullptr;
   }
 
-  static JSObjectCallAsFunctionCallbackDart _printDartFunc;
+  static JSObjectCallAsFunctionCallbackDart? _printDartFunc;
   Pointer _print(
       Pointer ctx,
       Pointer function,
@@ -184,7 +184,7 @@ helloJsCore();
   // 运行JavaScript脚本
   String _runJs(String script) {
     // 运行JavaScript脚本
-    Pointer<Utf8> scriptCString = Utf8.toUtf8(script);
+    Pointer<Utf8> scriptCString = script.toNativeUtf8();
     var jsValueRef = jSEvaluateScript(
         globalContext,
         jSStringCreateWithUTF8CString(scriptCString),
@@ -192,7 +192,7 @@ helloJsCore();
         nullptr,
         1,
         nullptr);
-    free(scriptCString);
+    malloc.free(scriptCString);
     // 获取返回结果
     String result = _getJsValue(jsValueRef);
     return result;
@@ -261,7 +261,7 @@ helloJsCore();
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            _result = _runJs(_jsInputController.text ?? '');
+            _result = _runJs(_jsInputController.text);
           });
         },
         child: Icon(Icons.autorenew),

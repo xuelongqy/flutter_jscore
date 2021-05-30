@@ -274,7 +274,7 @@ class JSValue {
 
   /// Returns a JavaScript value's Typed Array type.
   JSTypedArrayType getTypedArrayType({
-    JSValuePointer exception,
+    JSValuePointer? exception,
   }) {
     int typeCode = JSValueRef.jSValueGetTypedArrayType(context.pointer, pointer,
         (exception ?? JSValuePointer(nullptr)).pointer);
@@ -284,7 +284,7 @@ class JSValue {
   /// Tests whether two JavaScript values are equal, as compared by the JS == operator.
   bool isEqual(
     JSValue other, {
-    JSValuePointer exception,
+    JSValuePointer? exception,
   }) {
     return JSValueRef.jSValueIsEqual(context.pointer, pointer, other.pointer,
             (exception ?? JSValuePointer(nullptr)).pointer) ==
@@ -294,7 +294,7 @@ class JSValue {
   /// Tests whether a JavaScript value is an object constructed by a given constructor, as compared by the JS instanceof operator.
   bool isInstanceOfConstructor(
     JSObject constructor, {
-    JSValuePointer exception,
+    JSValuePointer? exception,
   }) {
     return JSValueRef.jSValueIsInstanceOfConstructor(
             context.pointer,
@@ -307,9 +307,9 @@ class JSValue {
   /// Creates a JavaScript string containing the JSON serialized representation of a JS value.
   /// [indent] The number of spaces to indent when nesting.  If 0, the resulting JSON will not contains newlines.  The size of the indent is clamped to 10 spaces.
   /// [exception] A pointer to a JSValueRef in which to store an exception, if any. Pass NULL if you do not care to store an exception.
-  JSString createJSONString(
-    JSValuePointer exception, {
+  JSString createJSONString({
     int indent = 4,
+    JSValuePointer? exception,
   }) {
     return JSString(JSValueRef.jSValueCreateJSONString(context.pointer, pointer,
         indent, (exception ?? JSValuePointer(nullptr)).pointer));
@@ -323,16 +323,16 @@ class JSValue {
   /// Converts a JavaScript value to number and returns the resulting number.
   /// [exception] A pointer to a JSValueRef in which to store an exception, if any. Pass NULL if you do not care to store an exception.
   double toNumber({
-    JSValuePointer exception,
+    JSValuePointer? exception,
   }) {
     return JSValueRef.jSValueToNumber(context.pointer, pointer,
         (exception ?? JSValuePointer(nullptr)).pointer);
   }
 
   /// Converts a JavaScript value to number and returns the resulting string.
-  String get string {
+  String? get string {
     JSString jsString = toStringCopy();
-    String str = jsString.string;
+    final str = jsString.string;
     jsString.release();
     return str;
   }
@@ -340,7 +340,7 @@ class JSValue {
   /// Converts a JavaScript value to string and copies the result into a JavaScript string.
   /// [exception] A pointer to a JSValueRef in which to store an exception, if any. Pass NULL if you do not care to store an exception.
   JSString toStringCopy({
-    JSValuePointer exception,
+    JSValuePointer? exception,
   }) {
     return JSString(JSValueRef.jSValueToStringCopy(context.pointer, pointer,
         (exception ?? JSValuePointer(nullptr)).pointer));
@@ -349,7 +349,7 @@ class JSValue {
   /// Converts a JavaScript value to object and returns the resulting object.
   /// [exception] A pointer to a JSValueRef in which to store an exception, if any. Pass NULL if you do not care to store an exception.
   JSObject toObject({
-    JSValuePointer exception,
+    JSValuePointer? exception,
   }) {
     return JSObject(
         context,
@@ -395,16 +395,16 @@ class JSValuePointer {
   /// Pointer array count
   final int count;
 
-  JSValuePointer([Pointer value])
+  JSValuePointer([Pointer? value])
       : this.count = 1,
-        this.pointer = allocate<Pointer>() {
+        this.pointer = malloc.call<Pointer>(1) {
     pointer.value = value ?? nullptr;
   }
 
   /// JSValueRef array
   JSValuePointer.array(List<JSValue> array)
       : this.count = array.length,
-        this.pointer = allocate<Pointer>(count: array.length) {
+        this.pointer = malloc.call<Pointer>(array.length) {
     for (int i = 0; i < array.length; i++) {
       this.pointer[i] = array[i].pointer;
     }

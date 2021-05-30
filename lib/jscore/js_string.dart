@@ -8,20 +8,20 @@ import '../binding/js_string_ref.dart' as JSStringRef;
 /// A UTF16 character buffer. The fundamental string representation in JavaScript.
 class JSString {
   /// C pointer
-  Pointer _pointer;
+  late Pointer _pointer;
   get pointer => _pointer;
 
   JSString(this._pointer);
 
   /// Creates a JavaScript string from dart String.
   /// [string] The dart String.
-  JSString.fromString(String string) {
+  JSString.fromString(String? string) {
     if (string == null) {
       _pointer = nullptr;
     } else {
-      var cString = Utf8.toUtf8(string);
+      var cString = string.toNativeUtf8();
       _pointer = JSStringRef.jSStringCreateWithUTF8CString(cString);
-      free(cString);
+      malloc.free(cString);
     }
   }
 
@@ -44,7 +44,7 @@ class JSString {
   }
 
   /// Returns dart String
-  String get string {
+  String? get string {
     if (_pointer == nullptr) return null;
     var cString = JSStringRef.jSStringGetCharactersPtr(_pointer);
     if (cString == nullptr) {
@@ -77,16 +77,16 @@ class JSStringPointer {
   /// Pointer array count
   final int count;
 
-  JSStringPointer([Pointer value])
+  JSStringPointer([Pointer? value])
       : this.count = 1,
-        this.pointer = allocate<Pointer>() {
+        this.pointer = malloc.call<Pointer>(1) {
     pointer.value = value ?? nullptr;
   }
 
   /// JSStringRef array
   JSStringPointer.array(List<String> array)
       : this.count = array.length,
-        this.pointer = allocate<Pointer>(count: array.length) {
+        this.pointer = malloc.call<Pointer>(array.length) {
     for (int i = 0; i < array.length; i++) {
       this.pointer[i] = JSString.fromString(array[i]).pointer;
     }

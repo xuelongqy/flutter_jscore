@@ -13,13 +13,13 @@ class JsCorePage extends StatefulWidget {
 
 class JsCorePageState extends State<JsCorePage> {
   // 输入控制器
-  TextEditingController _jsInputController;
+  late TextEditingController _jsInputController;
 
   // 结果
-  String _result;
+  String? _result;
 
   // Jsc上下文
-  JSContext _jsContext;
+  late JSContext _jsContext;
 
   @override
   void initState() {
@@ -79,13 +79,13 @@ helloJsCore();
       Pointer<Pointer> arguments,
       Pointer<Pointer> exception) {
     if (_alertDartFunc != null) {
-      _alertDartFunc(
+      _alertDartFunc!(
           ctx, function, thisObject, argumentCount, arguments, exception);
     }
     return nullptr;
   }
 
-  static JSObjectCallAsFunctionCallbackDart _alertDartFunc;
+  static JSObjectCallAsFunctionCallbackDart? _alertDartFunc;
   Pointer _alert(
       Pointer ctx,
       Pointer function,
@@ -101,7 +101,7 @@ helloJsCore();
           msg += '\n';
         }
         var jsValueRef = arguments[i];
-        msg += JSValue(_jsContext, jsValueRef).string;
+        msg += JSValue(_jsContext, jsValueRef).string!;
       }
     }
     showDialog(
@@ -124,13 +124,13 @@ helloJsCore();
       Pointer<Pointer> arguments,
       Pointer<Pointer> exception) {
     if (_printDartFunc != null) {
-      _printDartFunc(
+      _printDartFunc!(
           ctx, function, thisObject, argumentCount, arguments, exception);
     }
     return nullptr;
   }
 
-  static JSObjectCallAsFunctionCallbackDart _printDartFunc;
+  static JSObjectCallAsFunctionCallbackDart? _printDartFunc;
   Pointer _print(
       Pointer ctx,
       Pointer function,
@@ -145,7 +145,7 @@ helloJsCore();
   }
 
   // 运行JavaScript脚本
-  String _runJs(String script) {
+  String? _runJs(String script) {
     // 运行JavaScript脚本
     var jsValue = _jsContext.evaluate(script);
     // 获取返回结果
@@ -193,7 +193,7 @@ helloJsCore();
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            _result = _runJs(_jsInputController.text ?? '');
+            _result = _runJs(_jsInputController.text);
           });
         },
         child: Icon(Icons.autorenew),

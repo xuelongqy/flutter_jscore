@@ -32,7 +32,7 @@ final Pointer Function(
 final Pointer Function(
         Pointer ctx,
         int arrayType,
-        Pointer<Pointer> bytes,
+        Pointer bytes,
         int byteLength,
         Pointer<NativeFunction<JSTypedArrayBytesDeallocator>> bytesDeallocator,
         Pointer deallocatorContext,
@@ -83,13 +83,10 @@ final Pointer Function(Pointer ctx, int arrayType, Pointer buffer,
 /// [object] (JSObjectRef) The Typed Array object whose backing store pointer to return.
 /// [exception] (JSValueRef*) A pointer to a JSValueRef in which to store an exception, if any. Pass NULL if you do not care to store an exception.
 /// [@result] (void*) A pointer to the raw data buffer that serves as object's backing store or NULL if object is not a Typed Array object.
-final Pointer<Pointer> Function(
-        Pointer ctx, Pointer object, Pointer<Pointer> exception)
+final Pointer Function(Pointer ctx, Pointer object, Pointer<Pointer> exception)
     jSObjectGetTypedArrayBytesPtr = jscLib
-        .lookup<
-            NativeFunction<
-                Pointer<Pointer> Function(Pointer, Pointer,
-                    Pointer)>>('JSObjectGetTypedArrayBytesPtr')
+        .lookup<NativeFunction<Pointer Function(Pointer, Pointer, Pointer)>>(
+            'JSObjectGetTypedArrayBytesPtr')
         .asFunction();
 
 /// Returns the length of a JavaScript Typed Array object.

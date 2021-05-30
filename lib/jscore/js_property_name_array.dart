@@ -31,6 +31,6 @@ class JSPropertyNameArray {
   String propertyNameArrayGetNameAtIndex(int index) {
     return JSString(
             JSObjectRef.jSPropertyNameArrayGetNameAtIndex(pointer, index))
-        .string;
+        .string!;
   }
 }
