@@ -267,17 +267,17 @@ typedef JSObjectConvertToTypeCallbackDart = Pointer Function(
 /// This structure describes a statically declared value property.
 class JSStaticValue extends Struct {
   /// (const char* ) A null-terminated UTF8 string containing the property's name.
-  Pointer<Utf8>? name;
+  external Pointer<Utf8> name;
 
   /// (JSObjectGetPropertyCallback) A JSObjectGetPropertyCallback to invoke when getting the property's value.
-  Pointer<NativeFunction<JSObjectGetPropertyCallback>>? getProperty;
+  external Pointer<NativeFunction<JSObjectGetPropertyCallback>> getProperty;
 
   /// (JSObjectSetPropertyCallback) A JSObjectSetPropertyCallback to invoke when setting the property's value. May be NULL if the ReadOnly attribute is set.
-  Pointer<NativeFunction<JSObjectSetPropertyCallback>>? setProperty;
+  external Pointer<NativeFunction<JSObjectSetPropertyCallback>> setProperty;
 
   /// (unsigned) A logically ORed set of [JSPropertyAttributes] to give to the property.
   @Uint32()
-  int? attributes;
+  external int attributes;
 
   void setValue(JSStaticValueStruct struct) {
     this.name = struct.name;
@@ -324,14 +324,14 @@ class JSStaticValueStruct {
 /// This structure describes a statically declared function property.
 class JSStaticFunction extends Struct {
   /// (const char* ) A null-terminated UTF8 string containing the property's name.
-  Pointer<Utf8>? name;
+  external Pointer<Utf8> name;
 
   /// (JSObjectCallAsFunctionCallback) A JSObjectCallAsFunctionCallback to invoke when the property is called as a function.
-  Pointer<NativeFunction<JSObjectCallAsFunctionCallback>>? callAsFunction;
+  external Pointer<NativeFunction<JSObjectCallAsFunctionCallback>> callAsFunction;
 
   /// (unsigned) A logically ORed set of [JSPropertyAttributes] to give to the property.
   @Uint32()
-  int? attributes;
+  external int attributes;
 
   void setValue(JSStaticFunctionStruct struct) {
     this.name = struct.name;
@@ -386,56 +386,58 @@ class JSStaticFunctionStruct {
 class JSClassDefinition extends Struct {
   /// (int) The version number of this structure. The current version is 0.
   @Int32()
-  int? version;
+  external int version;
 
   /// (JSClassAttributes) A logically ORed set of [JSClassAttributes] to give to the class.
   @Int16()
-  int? attributes;
+  external int attributes;
 
   /// (const char* ) A null-terminated UTF8 string containing the class's name.
-  Pointer<Utf8>? className;
+  external Pointer<Utf8> className;
 
   /// (JSClassRef) A JSClass to set as the class's parent class. Pass NULL use the default object class.
-  Pointer? parentClass;
+  external Pointer parentClass;
 
   /// (const JSStaticValue*) A JSStaticValue array containing the class's statically declared value properties. Pass NULL to specify no statically declared value properties. The array must be terminated by a JSStaticValue whose name field is NULL.
-  Pointer<JSStaticValue>? staticValues;
+  external Pointer<JSStaticValue> staticValues;
 
   /// (const JSStaticFunction*) A JSStaticFunction array containing the class's statically declared function properties. Pass NULL to specify no statically declared function properties. The array must be terminated by a JSStaticFunction whose name field is NULL.
-  Pointer<JSStaticFunction>? staticFunctions;
+  external Pointer<JSStaticFunction> staticFunctions;
 
   /// (JSObjectInitializeCallback) The callback invoked when an object is first created. Use this callback to initialize the object.
-  Pointer<NativeFunction<JSObjectInitializeCallback>>? initialize;
+  external Pointer<NativeFunction<JSObjectInitializeCallback>> initialize;
 
   /// (JSObjectFinalizeCallback) The callback invoked when an object is finalized (prepared for garbage collection). Use this callback to release resources allocated for the object, and perform other cleanup.
-  Pointer<NativeFunction<JSObjectFinalizeCallback>>? finalize;
+  external Pointer<NativeFunction<JSObjectFinalizeCallback>> finalize;
 
   /// (JSObjectHasPropertyCallback) The callback invoked when determining whether an object has a property. If this field is NULL, getProperty is called instead. The hasProperty callback enables optimization in cases where only a property's existence needs to be known, not its value, and computing its value is expensive.
-  Pointer<NativeFunction<JSObjectHasPropertyCallback>>? hasProperty;
+  external Pointer<NativeFunction<JSObjectHasPropertyCallback>> hasProperty;
 
   /// (JSObjectGetPropertyCallback) The callback invoked when getting a property's value.
-  Pointer<NativeFunction<JSObjectGetPropertyCallback>>? getProperty;
+  external Pointer<NativeFunction<JSObjectGetPropertyCallback>> getProperty;
 
   /// (JSObjectSetPropertyCallback) The callback invoked when setting a property's value.
-  Pointer<NativeFunction<JSObjectSetPropertyCallback>>? setProperty;
+  external Pointer<NativeFunction<JSObjectSetPropertyCallback>> setProperty;
 
   /// (JSObjectDeletePropertyCallback) The callback invoked when deleting a property.
-  Pointer<NativeFunction<JSObjectDeletePropertyCallback>>? deleteProperty;
+  external Pointer<NativeFunction<JSObjectDeletePropertyCallback>> deleteProperty;
 
   /// (JSObjectGetPropertyNamesCallback) The callback invoked when collecting the names of an object's properties.
-  Pointer<NativeFunction<JSObjectGetPropertyNamesCallback>>? getPropertyNames;
+  external Pointer<NativeFunction<JSObjectGetPropertyNamesCallback>>
+      getPropertyNames;
 
   /// (JSObjectCallAsFunctionCallback) The callback invoked when an object is called as a function.
-  Pointer<NativeFunction<JSObjectCallAsFunctionCallback>>? callAsFunction;
+  external Pointer<NativeFunction<JSObjectCallAsFunctionCallback>> callAsFunction;
 
   /// (JSObjectCallAsConstructorCallback) The callback invoked when an object is used as the target of an 'instanceof' expression.
-  Pointer<NativeFunction<JSObjectCallAsConstructorCallback>>? callAsConstructor;
+  external Pointer<NativeFunction<JSObjectCallAsConstructorCallback>>
+      callAsConstructor;
 
   /// (JSObjectHasInstanceCallback) The callback invoked when an object is used as a constructor in a 'new' expression.
-  Pointer<NativeFunction<JSObjectHasInstanceCallback>>? hasInstance;
+  external Pointer<NativeFunction<JSObjectHasInstanceCallback>> hasInstance;
 
   /// (JSObjectConvertToTypeCallback) The callback invoked when converting an object to a particular JavaScript type.
-  Pointer<NativeFunction<JSObjectConvertToTypeCallback>>? convertToType;
+  external Pointer<NativeFunction<JSObjectConvertToTypeCallback>> convertToType;
 }
 
 extension JSClassDefinitionPointer on Pointer<JSClassDefinition> {
