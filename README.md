@@ -6,7 +6,7 @@
 
 JavaScriptCore for Flutter. The plugin provides the ability to evaluate JavaScript programs from within dart.
 
-#### Demo
+### Demo
 |Screen recording|Apk|
 |:---:|:---:|
 |![](https://raw.githubusercontent.com/xuelongqy/flutter_jscore/master/example/art/flutter_jscore.gif)|![](https://raw.githubusercontent.com/xuelongqy/flutter_jscore/master/example/art/apk_QRCode.png)|
@@ -14,7 +14,7 @@ JavaScriptCore for Flutter. The plugin provides the ability to evaluate JavaScri
 
 ## Getting Started
 
-#### Add dependency
+### Add plugin
 ```yaml
 // pub
 dependencies:
@@ -32,7 +32,97 @@ dependencies:
       url: git://github.com/xuelongqy/flutter_jscore.git
 ```
 
-#### Super simple to use
+### Add dynamic library
+
+Due to the size limitation of pub on package upload, you need to add JavaScriptCore dynamic library to the project by yourself.  
+You can refer to the [example](https://github.com/xuelongqy/flutter_jscore/tree/master/example). of course you can refer to [webkit](https://webkit.org/getting-the-code/) to compile it.  
+You can set JscFfi.lib to use the JavaScriptCore dynamic library.  
+```dart
+JscFfi.lib = Platform.isIOS || Platform.isMacOS
+  ? DynamicLibrary.open('JavaScriptCore.framework/JavaScriptCore')
+  : Platform.isWindows
+  ? DynamicLibrary.open('JavaScriptCore.dll')
+  : Platform.isLinux
+  ? DynamicLibrary.open('libjavascriptcoregtk-4.0.so.18')
+  : DynamicLibrary.open('libjsc.so');
+```
+
+#### Android
+
+You can get the aar file containing libjsc.so in [jsc-android](https://www.npmjs.com/package/jsc-android), and add to your project.  
+Take the [libs](https://github.com/xuelongqy/flutter_jscore/tree/master/example/android/app/libs) folder as an example, add it to the build.gradle of the module.
+```groovy
+android {
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+}
+dependencies {
+    implementation(name:'**', ext:'aar')
+}
+```
+You also need to add libc++_shared.so, because this is a dependency of libjsc.so.  
+Take the [jniLibs](https://github.com/xuelongqy/flutter_jscore/tree/master/example/android/app/jniLibs) folder as an example, add it to the build.gradle of the module.
+```groovy
+android {
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['jniLibs']
+        }
+    }
+}
+```
+If your project uses C++, then you can add the code in the module’s build.gradle.
+```groovy
+android {
+    defaultConfig {
+        externalNativeBuild {
+            make {
+                arguments "-DANDROID_STL=c++_shared"
+            }
+        }
+    }
+}
+```
+
+#### iOS and macOS
+
+You don’t need to do anything, because JavaScriptCore comes with iOS and macOS.
+
+#### Windows
+
+You can use the dynamic library in the [example](https://github.com/xuelongqy/flutter_jscore/tree/master/example/windows/JavaScriptCore), or compile it yourself. And configure in CMakeLists.txt.
+```text
+# Add JavaScriptCore libs
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/JavaScriptCore/"
+  DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
+  COMPONENT Runtime)
+```
+
+#### Linux
+
+You can use libjavascriptcoregtk as a dependency, or compile [webkitgtk](https://webkitgtk.org/) yourself.  
+The names of dynamic libraries in different Linux distributions may be different. So you need to set JscFfi.lib.  
+
+ubuntn or Debian
+```shell
+apt-get install libjavascriptcoregtk-4.0-18
+```
+```dart
+JscFfi.lib = DynamicLibrary.open('libjavascriptcoregtk-4.0.so.18');
+```
+
+Archlinux
+```shell
+pacman -S webkit2gtk
+```
+```dart
+JscFfi.lib = DynamicLibrary.open('libjavascriptcoregtk-4.0.so');
+```
+
+### Usage
 ```dart
 import 'package:flutter_jscore/flutter_jscore.dart';
 
