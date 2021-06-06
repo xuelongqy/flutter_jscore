@@ -36,7 +36,7 @@ dependencies:
 
 Due to the size limitation of pub on package upload, you need to add JavaScriptCore dynamic library to the project by yourself.  
 You can refer to the [example](https://github.com/xuelongqy/flutter_jscore/tree/master/example). of course you can refer to [webkit](https://webkit.org/getting-the-code/) to compile it.  
-You can set JscFfi.lib to use the JavaScriptCore dynamic library.  
+Set JscFfi.lib to use the JavaScriptCore dynamic library.  
 ```dart
 JscFfi.lib = Platform.isIOS || Platform.isMacOS
   ? DynamicLibrary.open('JavaScriptCore.framework/JavaScriptCore')
