@@ -53,6 +53,18 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['jniLibs']
+        }
+    }
 }
 
 flutter {
@@ -64,4 +76,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    implementation(name:'android-jsc-intl-r250230', ext:'aar')
 }
