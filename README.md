@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](/LICENSE)
 [![Awesome Flutter](https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square)](https://stackoverflow.com/questions/tagged/flutter?sort=votes)
-[![Pub](https://img.shields.io/badge/pub-v0.1.1-orange.svg)](https://pub.dartlang.org/packages/flutter_jscore)
+[![Pub](https://img.shields.io/pub/v/flutter_jscore)](https://pub.flutter-io.cn/packages/flutter_jscore)
 
 JavaScriptCore for Flutter. The plugin provides the ability to evaluate JavaScript programs from within dart.
 
@@ -62,9 +62,26 @@ Foreign Function Interface for interoperability with the C programming language.
  - iOS (7.0+) 
  - macOS (10.5+) 
  - Android (arm32, arm64, x86, x86_64) 
- - Windows (coming soon) 
- - Linux (coming soon) 
+ - Windows (x86_64) 
+ - Linux (x86_64) 
  
+## Linux dependencies
+
+If you use it on Linux, you must make sure to have the following dependencies.
+
+ - libglib-2.0.so.0
+ - libicui18n.so.66
+ - libicuuc.so.66
+ - libdl.so.2
+ - libgio-2.0.so.0
+ - libgobject-2.0.so.0
+ - libpthread.so.0
+ - libstdc++.so.6
+ - libm.so.6
+ - libgcc_s.so.1
+ - libc.so.6
+ - ld-linux-x86-64.so.2
+
 ## APIs
  
 I don't think there is much to describe, flutter_jscore just makes a simple package. You can refer to the documentation of JavaScriptCore and the documentation on pub.
