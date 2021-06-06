@@ -1,8 +1,8 @@
 ## 1.0.0
 > Add: null safety.   
-> Add: Windows support.
-> Add: Linux support.
-> Update: Android dynamic library.
+> Add: Windows support.   
+> Add: Linux support.   
+> Update: Android dynamic library.   
 
 ## 0.1.1
 > Fix: Some callback functions have no return value type.   
