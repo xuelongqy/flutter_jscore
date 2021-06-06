@@ -296,13 +296,13 @@ class JSStaticValue {
   });
 
   Pointer<JSObjectRef.JSStaticValue> create() {
-    return JSObjectRef.JSStaticValuePointer.allocate(JSObjectRef.JSStaticValueStruct(
+    return JSObjectRef.JSStaticValuePointer.allocate(
+        JSObjectRef.JSStaticValueStruct(
       name: name.toNativeUtf8(),
       getProperty: getProperty ?? nullptr,
       setProperty: setProperty ?? nullptr,
       attributes: jSPropertyAttributesToCEnum(attributes),
-    )
-    );
+    ));
   }
 
   JSObjectRef.JSStaticValueStruct toStruct() {
@@ -342,12 +342,12 @@ class JSStaticFunction {
   });
 
   Pointer<JSObjectRef.JSStaticFunction> create() {
-    return JSObjectRef.JSStaticFunctionPointer.allocate(JSObjectRef.JSStaticFunctionStruct(
+    return JSObjectRef.JSStaticFunctionPointer.allocate(
+        JSObjectRef.JSStaticFunctionStruct(
       name: name.toNativeUtf8(),
       callAsFunction: callAsFunction ?? nullptr,
       attributes: jSPropertyAttributesToCEnum(attributes),
-    )
-    );
+    ));
   }
 
   JSObjectRef.JSStaticFunctionStruct toStruct() {

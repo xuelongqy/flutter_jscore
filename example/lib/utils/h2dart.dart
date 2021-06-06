@@ -238,7 +238,8 @@ import 'jsc_ffi.dart';
       contentStructure.funcStructures!.isNotEmpty) {
     contentStructure.funcStructures!.forEach((funcStructure) {
       // 摘要
-      if (funcStructure.abstract != null && funcStructure.abstract!.isNotEmpty) {
+      if (funcStructure.abstract != null &&
+          funcStructure.abstract!.isNotEmpty) {
         funcStructure.abstract!.forEach((item) {
           dartContent += '\n /// ${item ?? ''}';
         });
@@ -258,7 +259,8 @@ import 'jsc_ffi.dart';
         });
       }
       // 返回值
-      if (funcStructure.result != null && funcStructure.result!.type != 'void') {
+      if (funcStructure.result != null &&
+          funcStructure.result!.type != 'void') {
         dartContent +=
             '\n /// ${funcStructure.result!.name != null ? '[${funcStructure.result!.name}]' : ''} ${funcStructure.result!.type != null ? '(${funcStructure.result!.type})' : ''} ${funcStructure.result!.abstract ?? ''}';
       }

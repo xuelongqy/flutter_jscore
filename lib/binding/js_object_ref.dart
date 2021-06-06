@@ -327,7 +327,8 @@ class JSStaticFunction extends Struct {
   external Pointer<Utf8> name;
 
   /// (JSObjectCallAsFunctionCallback) A JSObjectCallAsFunctionCallback to invoke when the property is called as a function.
-  external Pointer<NativeFunction<JSObjectCallAsFunctionCallback>> callAsFunction;
+  external Pointer<NativeFunction<JSObjectCallAsFunctionCallback>>
+      callAsFunction;
 
   /// (unsigned) A logically ORed set of [JSPropertyAttributes] to give to the property.
   @Uint32()
@@ -420,14 +421,16 @@ class JSClassDefinition extends Struct {
   external Pointer<NativeFunction<JSObjectSetPropertyCallback>> setProperty;
 
   /// (JSObjectDeletePropertyCallback) The callback invoked when deleting a property.
-  external Pointer<NativeFunction<JSObjectDeletePropertyCallback>> deleteProperty;
+  external Pointer<NativeFunction<JSObjectDeletePropertyCallback>>
+      deleteProperty;
 
   /// (JSObjectGetPropertyNamesCallback) The callback invoked when collecting the names of an object's properties.
   external Pointer<NativeFunction<JSObjectGetPropertyNamesCallback>>
       getPropertyNames;
 
   /// (JSObjectCallAsFunctionCallback) The callback invoked when an object is called as a function.
-  external Pointer<NativeFunction<JSObjectCallAsFunctionCallback>> callAsFunction;
+  external Pointer<NativeFunction<JSObjectCallAsFunctionCallback>>
+      callAsFunction;
 
   /// (JSObjectCallAsConstructorCallback) The callback invoked when an object is used as the target of an 'instanceof' expression.
   external Pointer<NativeFunction<JSObjectCallAsConstructorCallback>>
